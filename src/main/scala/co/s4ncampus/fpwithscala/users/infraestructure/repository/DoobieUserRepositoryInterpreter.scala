@@ -21,6 +21,7 @@ private object UserSQL {
     WHERE LEGAL_ID = $legalId
   """.query[User]
 
+  //todo: Creacion de funciones update, delete y read en formato SQL
 }
 
 class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Transactor[F])
@@ -31,6 +32,8 @@ class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Tr
     insert(user).withUniqueGeneratedKeys[Long]("ID").map(id => user.copy(id = id.some)).transact(xa)
 
   def findByLegalId(legalId: String): OptionT[F, User] = OptionT(selectByLegalId(legalId).option.transact(xa))
+
+  //todo: Rspecificar definiciones update, delete y read.
 
 }
 

@@ -9,6 +9,7 @@ class UserService[F[_]](repository: UserRepositoryAlgebra[F], validation: UserVa
       _ <- validation.doesNotExist(user)
       saved <- EitherT.liftF(repository.create(user))
     } yield saved
+  // todo: Creacion de funciones update, delete, read
 }
 
 object UserService{
