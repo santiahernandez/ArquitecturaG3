@@ -8,6 +8,9 @@ class UserValidationInterpreter[F[_]: Applicative](repository: UserRepositoryAlg
   def doesNotExist(user: User): EitherT[F, UserAlreadyExistsError, Unit] = 
     repository.findByLegalId(user.legalId).map(UserAlreadyExistsError).toLeft(())
 
+  def doesExist(legalId: String): EitherT[F, UserDoesntExistError, Unit] =
+    repository.findByLegalId(legalId).map(UserDoesntExistError).toLeft(())
+
   //todo: Validacion formato correo, telefono
 }
 

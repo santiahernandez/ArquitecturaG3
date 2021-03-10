@@ -21,6 +21,18 @@ private object UserSQL {
     WHERE LEGAL_ID = $legalId
   """.query[User]
 
+  /**
+   *
+   * @param legalId
+   * @return
+   */
+
+  def removeByLegalId(legalId: String): Query0[User] = sql"""
+    DELETE
+    FROM USERS
+    WHERE LEGAL_ID = $legalId
+  """.query[User]
+
   //todo: Creacion de funciones update, delete y read en formato SQL
 }
 
@@ -33,10 +45,14 @@ class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Tr
 
   def findByLegalId(legalId: String): OptionT[F, User] = OptionT(selectByLegalId(legalId).option.transact(xa))
 
+  def findByLegalIdTest(legalId: String) : OptionT[F, User] = OptionT(selectByLegalId(legalId).option.transact(xa))
+
+  def deleteByLegalId(legalId: String): OptionT[F, User] = OptionT(removeByLegalId(legalId).option.transact(xa))
+
   //todo: Rspecificar definiciones update, delete y read.
 
 }
-
+/* No tocar plox*/
 object DoobieUserRepositoryInterpreter {
   def apply[F[_]: Bracket[?[_], Throwable]](xa: Transactor[F]): DoobieUserRepositoryInterpreter[F] =
     new DoobieUserRepositoryInterpreter[F](xa)
