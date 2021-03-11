@@ -12,7 +12,6 @@ class UserValidationInterpreter[F[_]: Applicative](repository: UserRepositoryAlg
     EitherT(repository.findByLegalId(legalId)
       .map(_ => Right(()))
       .getOrElse(Left(UserDoesntExistError(legalId))))
-  //todo: Validacion formato correo, telefono
 }
 
 object UserValidationInterpreter {

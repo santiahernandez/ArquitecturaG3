@@ -111,7 +111,6 @@ class UsersController[F[_]: Sync] extends Http4sDsl[F] {
         //To convine routes use the function `<+>`
         createUser(userService) <+> findUser(userService) <+> deleteUser(userService) <+> updateUserPhone(userService) <+>
           updateUserName(userService) <+> updateUserEmail(userService) <+> updateUserLastName(userService)
-        //todo: Concatenacion de funciones update, delete y read
     }
 
 }
