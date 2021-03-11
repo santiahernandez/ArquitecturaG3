@@ -68,15 +68,15 @@ class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Tr
   def findByLegalId(legalId: String): OptionT[F, User] =
     OptionT(selectByLegalId(legalId).option.transact(xa))
 
-  def deleteByLegalId(legalId: String): F[Int] = removeByLegalId(legalId).run.transact(xa)
+  def deleteByLegalId(legalId: String): F[Boolean] = removeByLegalId(legalId).run.transact(xa).map(l => if (l == 1) true else false)
 
-  def updatePhoneByLegalId(legalId: String, phone:String): F[Int] = putPhoneByLegalId(legalId,phone).run.transact(xa)
+  def updatePhoneByLegalId(legalId: String, phone:String): F[Boolean] = putPhoneByLegalId(legalId,phone).run.transact(xa).map(l => if (l == 1) true else false)
 
-  def updateEmailByLegalId(legalId: String, email:String): F[Int] = putEmailByLegalId(legalId,email).run.transact(xa)
+  def updateEmailByLegalId(legalId: String, email:String): F[Boolean] = putEmailByLegalId(legalId,email).run.transact(xa).map(l => if (l == 1) true else false)
 
-  def updateNameByLegalId(legalId: String, name:String): F[Int] = putNameByLegalId(legalId,name).run.transact(xa)
+  def updateNameByLegalId(legalId: String, name:String): F[Boolean] = putNameByLegalId(legalId,name).run.transact(xa).map(l => if (l == 1) true else false)
 
-  def updateLastNameByLegalId(legalId: String, lastName:String): F[Int] = putlastNameByLegalId(legalId,lastName).run.transact(xa)
+  def updateLastNameByLegalId(legalId: String, lastName:String): F[Boolean] = putlastNameByLegalId(legalId,lastName).run.transact(xa).map(l => if (l == 1) true else false)
 
 
   /*def deleteByLegalId(legalId: String): EitherT[F, UserDeleteFailed, Unit] =

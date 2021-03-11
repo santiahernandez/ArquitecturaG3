@@ -51,20 +51,21 @@ class UsersController[F[_]: Sync] extends Http4sDsl[F] {
                    result <- userService.deleteByLegalId(legalId).value
                 } yield result
                 action.flatMap {
-                    case Right(_) => Ok("Deleted")
+                    case Right(_) => Ok()
                     case Left(UserDeleteFailed(_)) => Conflict(s"The user with legal id $legalId doesn't exists")
                 }
         }
 
     private def updateUserPhone (userService: UserService[F]): HttpRoutes[F] =
         HttpRoutes.of[F] {
-            case PATCH -> Root / "phone" / id / phone =>
+            case req @PATCH -> Root / "phone" / legalId / phone =>
                 val action = for {
-                    result <- userService.updatePhoneBylegalId(id,phone).value
+                    user <- req.as[User]
+                    result <- userService.updatePhoneBylegalId(legalId,phone).value
                 } yield result
                 action.flatMap {
-                    case Right(saved) => Ok(saved.asJson)
-                    case Left(UserDoesntExistError) => NotFound(s"The user with legal id $id doesn't exists")
+                    case Right(saved) => Ok()
+                    case Left(UserDoesntExistError) => NotFound(s"The user with legal id $legalId doesn't exists")
                 }
         }
 
@@ -75,7 +76,7 @@ class UsersController[F[_]: Sync] extends Http4sDsl[F] {
                     result <- userService.updateEmailByLegalId(id,phone).value
                 } yield result
                 action.flatMap {
-                    case Right(saved) => Ok(saved.asJson)
+                    case Right(saved) => Ok()
                     case Left(UserDoesntExistError) => NotFound(s"The user with legal id $id doesn't exists")
                 }
         }
@@ -87,7 +88,7 @@ class UsersController[F[_]: Sync] extends Http4sDsl[F] {
                     result <- userService.updateNameByLegalId(id,name).value
                 } yield result
                 action.flatMap {
-                    case Right(saved) => Ok(saved.asJson)
+                    case Right(saved) => Ok()
                     case Left(UserDoesntExistError) => NotFound(s"The user with legal id $id doesn't exists")
                 }
         }
@@ -100,7 +101,7 @@ class UsersController[F[_]: Sync] extends Http4sDsl[F] {
                     result <- userService.updateLastNameByLegalId(id,lastName).value
                 } yield result
                 action.flatMap {
-                    case Right(saved) => Ok(saved.asJson)
+                    case Right(saved) => Ok()
                     case Left(UserDoesntExistError) => NotFound(s"The user with legal id $id doesn't exists")
                 }
         }

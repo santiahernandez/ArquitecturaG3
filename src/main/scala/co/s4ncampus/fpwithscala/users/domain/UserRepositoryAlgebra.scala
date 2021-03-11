@@ -7,14 +7,14 @@ trait UserRepositoryAlgebra[F[_]] {
 
   def findByLegalId(legalId: String): OptionT[F, User]
 
-  def deleteByLegalId(legalId: String): F[Int]
+  def deleteByLegalId(legalId: String): F[Boolean]
 
-  def updatePhoneByLegalId(legalId: String, phone: String): F[Int]
+  def updatePhoneByLegalId(legalId: String, phone: String): F[Boolean]
 
-  def updateEmailByLegalId(legalId: String, email: String): F[Int]
+  def updateEmailByLegalId(legalId: String, email: String): F[Boolean]
 
-  def updateNameByLegalId(legalId: String, name: String): F[Int]
+  def updateNameByLegalId(legalId: String, name: String): F[Boolean]
 
-  def updateLastNameByLegalId(legalId: String, lastName: String): F[Int]
+  def updateLastNameByLegalId(legalId: String, lastName: String): F[Boolean]
 
 }
