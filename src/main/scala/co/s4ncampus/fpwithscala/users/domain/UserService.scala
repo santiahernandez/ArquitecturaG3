@@ -15,8 +15,10 @@ class UserService[F[_]](repository: UserRepositoryAlgebra[F], validation: UserVa
     repository.findByLegalId(legalId).toRight(UserDoesntExistError)
 
 
-  def deleteByLegalId(legalId: String)(implicit F: Monad[F]): EitherT[F, UserDeleteFailed, Int] =
+  def deleteByLegalId(legalId: String)(implicit F: Monad[F]): EitherT[F, UserDeleteFailed, Int] = {
     EitherT.liftF(repository.deleteByLegalId(legalId))
+    //
+  }
 
 
   /* def updatePhoneBylegalId(user: User)(implicit F: Monad[F]): EitherT[F, UserDoesntExistError.type, User] = for {
