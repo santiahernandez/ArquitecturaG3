@@ -7,9 +7,7 @@ trait UserRepositoryAlgebra[F[_]] {
 
   def findByLegalId(legalId: String): OptionT[F, User]
 
-  def deleteByLegalId(user: User): F[Boolean]
-
-  def deleteByLegalIdDirect(legalId: String): F[Boolean]
+  def deleteByLegalId(legalId: String): F[Boolean]
 
   def updateEverythingByLegalId(user:User): F[Boolean]
 

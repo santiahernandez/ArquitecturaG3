@@ -26,14 +26,7 @@ private object UserSQL {
    * @param legalId
    * @return
    */
-
-  def removeByLegalId(user: User): Update0 = sql"""
-    DELETE
-    FROM USERS
-    WHERE LEGAL_ID = ${user.legalId}
-  """.update
-
-  def removeByLegalIdDirect(legalId: String): Update0 = sql"""
+  def removeByLegalId(legalId: String): Update0 = sql"""
     DELETE
     FROM USERS
     WHERE LEGAL_ID = $legalId
@@ -61,18 +54,10 @@ class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Tr
   def findByLegalId(legalId: String): OptionT[F, User] =
     OptionT(selectByLegalId(legalId).option.transact(xa))
 
-  def deleteByLegalId(user: User): F[Boolean] = removeByLegalId(user).run.transact(xa).map(l => if (l == 1) true else false)
+  def deleteByLegalId(legalId: String): F[Boolean] = removeByLegalId(legalId).run.transact(xa).map(l => l == 1)
 
-  def deleteByLegalIdDirect(legalId: String): F[Boolean] = removeByLegalIdDirect(legalId).run.transact(xa).map(l => if (l == 1) true else false)
+  def updateEverythingByLegalId(user: User): F[Boolean] = putEverythingByLegalid(user).run.transact(xa).map(l => l == 1)
 
-  def updateEverythingByLegalId(user: User): F[Boolean] = putEverythingByLegalid(user).run.transact(xa).map(l => if (l == 1) true else false)
-
-
-  /*def deleteByLegalId(legalId: String): EitherT[F, UserDeleteFailed, Unit] =
-    EitherT(removeByLegalId(legalId).run.transact(xa)
-      .attempt
-      .map(_.leftMap(_ => UserDeleteFailed(legalId)).void))
-*/
 }
 
 /* No tocar plox*/
