@@ -53,7 +53,6 @@ class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Tr
 
   def deleteByLegalId(legalId: String): F[Int] = removeByLegalId(legalId).run.transact(xa)
 
-//  def deleteByLegalIdTest(user:User): F[User] = removeByLegalId(user.legalId).run.transact(xa).map(legalId => findByLegalId(user.legalId))
 
   /*def deleteByLegalId(legalId: String): EitherT[F, UserDeleteFailed, Unit] =
     EitherT(removeByLegalId(legalId).run.transact(xa)
