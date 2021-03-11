@@ -8,4 +8,3 @@ case class UserDoesntExistError(legalId: String) extends ValidationError
 
 case class UserDeleteFailed(legalId: String) extends ValidationError
 
-//todo: Creacion clases de error.

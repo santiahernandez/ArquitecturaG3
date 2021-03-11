@@ -52,9 +52,6 @@ private object UserSQL {
     UPDATE USERS SET LAST_NAME = ${lastName}
     WHERE LEGAL_ID = ${legalId}
   """.update
-
-
-  //todo: Creacion de funciones update, delete y read en formato SQL
 }
 
 class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Transactor[F])
@@ -84,8 +81,6 @@ class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Tr
       .attempt
       .map(_.leftMap(_ => UserDeleteFailed(legalId)).void))
 */
-
-  //todo: Rspecificar definiciones update, delete y read.
 }
 
 /* No tocar plox*/
