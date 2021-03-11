@@ -18,17 +18,27 @@ class UserService[F[_]](repository: UserRepositoryAlgebra[F], validation: UserVa
   def deleteByLegalId(legalId: String)(implicit F: Functor[F]): EitherT[F, UserDeleteFailed, Int] =
     EitherT.liftF(repository.deleteByLegalId(legalId))
 
-
+  /*
+  def deleteByLegalId(legalId: String)(implicit F: Functor[F]): EitherT[F, UserDoesntExistError.type, User] = for {
+    saved <- repository.deleteByLegalId(legalId).toRight(UserDoesntExistError)
+  }yield saved*/
 
   def updatePhoneBylegalId(legalId:String, phone:String)(implicit F: Monad[F]): EitherT[F, UserDoesntExistError.type, Int] =  {
     EitherT.liftF(repository.updatePhoneByLegalId(legalId,phone))
   }
-/*
-  def deleteByLegalId(legalId: String)(implicit F: Functor[F]): EitherT[F, UserDoesntExistError.type, User] = for {
-    saved <- repository.deleteByLegalId(legalId).toRight(UserDoesntExistError)
-  }yield saved
-*/
-  // todo: Creacion de funciones update, delete, read
+
+  def updateEmailByLegalId(legalId:String, email:String)(implicit F: Monad[F]): EitherT[F, UserDoesntExistError.type, Int] =  {
+    EitherT.liftF(repository.updateEmailByLegalId(legalId,email))
+  }
+
+  def updateNameByLegalId(legalId:String, name:String)(implicit F: Monad[F]): EitherT[F, UserDoesntExistError.type, Int] =  {
+    EitherT.liftF(repository.updateNameByLegalId(legalId,name))
+  }
+
+  def updateLastNameByLegalId(legalId:String, lastName:String)(implicit F: Monad[F]): EitherT[F, UserDoesntExistError.type, Int] =  {
+    EitherT.liftF(repository.updateLastNameByLegalId(legalId,lastName))
+  }
+
 }
 
 object UserService {

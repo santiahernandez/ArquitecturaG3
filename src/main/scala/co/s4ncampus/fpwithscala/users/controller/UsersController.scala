@@ -64,14 +64,52 @@ class UsersController[F[_]: Sync] extends Http4sDsl[F] {
                 } yield result
                 action.flatMap {
                     case Right(saved) => Ok(saved.asJson)
-                    case Left(UserDoesntExistError) => Conflict(s"The user with legal id $id doesn't exists")
+                    case Left(UserDoesntExistError) => NotFound(s"The user with legal id $id doesn't exists")
+                }
+        }
+
+    private def updateUserEmail (userService: UserService[F]): HttpRoutes[F] =
+        HttpRoutes.of[F] {
+            case PATCH -> Root / "email" / id / phone =>
+                val action = for {
+                    result <- userService.updateEmailByLegalId(id,phone).value
+                } yield result
+                action.flatMap {
+                    case Right(saved) => Ok(saved.asJson)
+                    case Left(UserDoesntExistError) => NotFound(s"The user with legal id $id doesn't exists")
+                }
+        }
+
+    private def updateUserName (userService: UserService[F]): HttpRoutes[F] =
+        HttpRoutes.of[F] {
+            case PATCH -> Root / "name" / id / name =>
+                val action = for {
+                    result <- userService.updateNameByLegalId(id,name).value
+                } yield result
+                action.flatMap {
+                    case Right(saved) => Ok(saved.asJson)
+                    case Left(UserDoesntExistError) => NotFound(s"The user with legal id $id doesn't exists")
+                }
+        }
+
+
+    private def updateUserLastName (userService: UserService[F]): HttpRoutes[F] =
+        HttpRoutes.of[F] {
+            case PATCH -> Root / "lastName" / id / lastName =>
+                val action = for {
+                    result <- userService.updateLastNameByLegalId(id,lastName).value
+                } yield result
+                action.flatMap {
+                    case Right(saved) => Ok(saved.asJson)
+                    case Left(UserDoesntExistError) => NotFound(s"The user with legal id $id doesn't exists")
                 }
         }
 
 
     def endpoints(userService: UserService[F]): HttpRoutes[F] = {
         //To convine routes use the function `<+>`
-        createUser(userService) <+> findUser(userService) <+> deleteUser(userService) <+> updateUserPhone(userService)
+        createUser(userService) <+> findUser(userService) <+> deleteUser(userService) <+> updateUserPhone(userService) <+>
+          updateUserName(userService) <+> updateUserEmail(userService) <+> updateUserLastName(userService)
         //todo: Concatenacion de funciones update, delete y read
     }
 

@@ -9,13 +9,12 @@ trait UserRepositoryAlgebra[F[_]] {
 
   def deleteByLegalId(legalId: String): F[Int]
 
-  def updatePhoneByLegalId(legalId:String , phone:String): F[Int]
+  def updatePhoneByLegalId(legalId: String, phone: String): F[Int]
 
-  //def updateEmailByLegalId(legalId: String, email:String): OptionT[F, User]
-  //def updateNameByLegalId(legalId: String, name:String): OptionT[F, User]
-  //def updateLastNameByLegalId(legalId: String, lastName:String): OptionT[F, User]
+  def updateEmailByLegalId(legalId: String, email: String): F[Int]
 
-  //def deleteByLegalId(legalId: String): EitherT[F,UserDeleteFailed,Unit]
+  def updateNameByLegalId(legalId: String, name: String): F[Int]
 
+  def updateLastNameByLegalId(legalId: String, lastName: String): F[Int]
 
 }

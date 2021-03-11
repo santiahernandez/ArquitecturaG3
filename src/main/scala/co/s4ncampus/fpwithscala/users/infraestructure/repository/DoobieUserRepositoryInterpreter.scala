@@ -21,10 +21,6 @@ private object UserSQL {
     WHERE LEGAL_ID = $legalId
   """.query[User]
 
-  def putPhoneByLegalId(legalId:String, phone:String): Update0 = sql"""
-    UPDATE USERS SET PHONE = $phone
-    WHERE LEGAL_ID = $legalId
-  """.update
   /**
    *
    * @param legalId
@@ -37,10 +33,26 @@ private object UserSQL {
     WHERE LEGAL_ID = $legalId
   """.update
 
-  def putPhoneByLegalId(user:User): Update0 = sql"""
-    UPDATE USERS SET PHONE = ${user.phone}
-    WHERE LEGAL_ID = ${user.legalId}
+  def putPhoneByLegalId(legalId: String, phone:String): Update0 = sql"""
+    UPDATE USERS SET PHONE = ${phone}
+    WHERE LEGAL_ID = ${legalId}
   """.update
+
+  def putEmailByLegalId(legalId: String, email:String): Update0 = sql"""
+    UPDATE USERS SET EMAIL = ${email}
+    WHERE LEGAL_ID = ${legalId}
+  """.update
+
+  def putNameByLegalId(legalId: String, name:String): Update0 = sql"""
+    UPDATE USERS SET FIRST_NAME = ${name}
+    WHERE LEGAL_ID = ${legalId}
+  """.update
+
+  def putlastNameByLegalId(legalId: String, lastName:String): Update0 = sql"""
+    UPDATE USERS SET LAST_NAME = ${lastName}
+    WHERE LEGAL_ID = ${legalId}
+  """.update
+
 
   //todo: Creacion de funciones update, delete y read en formato SQL
 }
@@ -56,9 +68,15 @@ class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Tr
   def findByLegalId(legalId: String): OptionT[F, User] =
     OptionT(selectByLegalId(legalId).option.transact(xa))
 
-  def updatePhoneByLegalId(legalId: String, phone:String): F[Int] = putPhoneByLegalId(legalId,phone ).run.transact(xa)
-
   def deleteByLegalId(legalId: String): F[Int] = removeByLegalId(legalId).run.transact(xa)
+
+  def updatePhoneByLegalId(legalId: String, phone:String): F[Int] = putPhoneByLegalId(legalId,phone).run.transact(xa)
+
+  def updateEmailByLegalId(legalId: String, email:String): F[Int] = putEmailByLegalId(legalId,email).run.transact(xa)
+
+  def updateNameByLegalId(legalId: String, name:String): F[Int] = putNameByLegalId(legalId,name).run.transact(xa)
+
+  def updateLastNameByLegalId(legalId: String, lastName:String): F[Int] = putlastNameByLegalId(legalId,lastName).run.transact(xa)
 
 
   /*def deleteByLegalId(legalId: String): EitherT[F, UserDeleteFailed, Unit] =
@@ -66,8 +84,6 @@ class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Tr
       .attempt
       .map(_.leftMap(_ => UserDeleteFailed(legalId)).void))
 */
-    //def updatePhoneByLegalId(user: User): F[User]=  putPhoneByLegalId(user).run.transact(xa).as(user)
-
 
   //todo: Rspecificar definiciones update, delete y read.
 }
