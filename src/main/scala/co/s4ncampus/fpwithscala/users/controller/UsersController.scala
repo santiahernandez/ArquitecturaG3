@@ -56,9 +56,9 @@ class UsersController[F[_]: Sync] extends Http4sDsl[F] {
                 }
         }
 
-    /*private def updateUserPhone (userService: UserService[F]): HttpRoutes[F] =
+    private def updateUserPhone (userService: UserService[F]): HttpRoutes[F] =
         HttpRoutes.of[F] {
-            case PUT -> Root /id /phone =>
+            case PATCH -> Root / "phone" / id / phone =>
                 val action = for {
                     result <- userService.updatePhoneBylegalId(id,phone).value
                 } yield result
@@ -68,12 +68,10 @@ class UsersController[F[_]: Sync] extends Http4sDsl[F] {
                 }
         }
 
-     */
-
 
     def endpoints(userService: UserService[F]): HttpRoutes[F] = {
         //To convine routes use the function `<+>`
-        createUser(userService) <+> findUser(userService) <+> deleteUser(userService)
+        createUser(userService) <+> findUser(userService) <+> deleteUser(userService) <+> updateUserPhone(userService)
         //todo: Concatenacion de funciones update, delete y read
     }
 
