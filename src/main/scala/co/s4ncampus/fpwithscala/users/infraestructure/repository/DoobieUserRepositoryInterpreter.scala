@@ -27,31 +27,27 @@ private object UserSQL {
    * @return
    */
 
-  def removeByLegalId(legalId: String): Update0 = sql"""
+  def removeByLegalId(user: User): Update0 = sql"""
+    DELETE
+    FROM USERS
+    WHERE LEGAL_ID = ${user.legalId}
+  """.update
+
+  def removeByLegalIdDirect(legalId: String): Update0 = sql"""
     DELETE
     FROM USERS
     WHERE LEGAL_ID = $legalId
   """.update
 
-  def putPhoneByLegalId(legalId: String, phone:String): Update0 = sql"""
-    UPDATE USERS SET PHONE = ${phone}
-    WHERE LEGAL_ID = ${legalId}
+  def putEverythingByLegalid(user:User): Update0 = sql"""
+    UPDATE USERS
+    SET FIRST_NAME = ${user.firstName},
+    LAST_NAME = ${user.lastName},
+    EMAIL = ${user.email},
+    PHONE = ${user.phone}
+    WHERE LEGAL_ID = ${user.legalId}
   """.update
 
-  def putEmailByLegalId(legalId: String, email:String): Update0 = sql"""
-    UPDATE USERS SET EMAIL = ${email}
-    WHERE LEGAL_ID = ${legalId}
-  """.update
-
-  def putNameByLegalId(legalId: String, name:String): Update0 = sql"""
-    UPDATE USERS SET FIRST_NAME = ${name}
-    WHERE LEGAL_ID = ${legalId}
-  """.update
-
-  def putlastNameByLegalId(legalId: String, lastName:String): Update0 = sql"""
-    UPDATE USERS SET LAST_NAME = ${lastName}
-    WHERE LEGAL_ID = ${legalId}
-  """.update
 }
 
 class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Transactor[F])
@@ -65,15 +61,11 @@ class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Tr
   def findByLegalId(legalId: String): OptionT[F, User] =
     OptionT(selectByLegalId(legalId).option.transact(xa))
 
-  def deleteByLegalId(legalId: String): F[Boolean] = removeByLegalId(legalId).run.transact(xa).map(l => if (l == 1) true else false)
+  def deleteByLegalId(user: User): F[Boolean] = removeByLegalId(user).run.transact(xa).map(l => if (l == 1) true else false)
 
-  def updatePhoneByLegalId(legalId: String, phone:String): F[Boolean] = putPhoneByLegalId(legalId,phone).run.transact(xa).map(l => if (l == 1) true else false)
+  def deleteByLegalIdDirect(legalId: String): F[Boolean] = removeByLegalIdDirect(legalId).run.transact(xa).map(l => if (l == 1) true else false)
 
-  def updateEmailByLegalId(legalId: String, email:String): F[Boolean] = putEmailByLegalId(legalId,email).run.transact(xa).map(l => if (l == 1) true else false)
-
-  def updateNameByLegalId(legalId: String, name:String): F[Boolean] = putNameByLegalId(legalId,name).run.transact(xa).map(l => if (l == 1) true else false)
-
-  def updateLastNameByLegalId(legalId: String, lastName:String): F[Boolean] = putlastNameByLegalId(legalId,lastName).run.transact(xa).map(l => if (l == 1) true else false)
+  def updateEverythingByLegalId(user: User): F[Boolean] = putEverythingByLegalid(user).run.transact(xa).map(l => if (l == 1) true else false)
 
 
   /*def deleteByLegalId(legalId: String): EitherT[F, UserDeleteFailed, Unit] =
