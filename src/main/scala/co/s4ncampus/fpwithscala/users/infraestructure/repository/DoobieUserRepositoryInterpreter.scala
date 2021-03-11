@@ -33,11 +33,17 @@ private object UserSQL {
     WHERE LEGAL_ID = $legalId
   """.update
 
+  def putPhoneByLegalId(user:User): Update0 = sql"""
+    UPDATE USERS SET PHONE = ${user.phone}
+    WHERE LEGAL_ID = ${user.legalId}
+  """.update
+
   //todo: Creacion de funciones update, delete y read en formato SQL
 }
 
 class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Transactor[F])
   extends UserRepositoryAlgebra[F] {
+
   import UserSQL._
 
   def create(user: User): F[User] =
@@ -45,12 +51,21 @@ class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Tr
 
   def findByLegalId(legalId: String): OptionT[F, User] = OptionT(selectByLegalId(legalId).option.transact(xa))
 
-  //def deleteByLegalId(legalId: String): OptionT[F,User] = OptionT(removeByLegalId(legalId).option.transact(xa))
-  override def deleteByLegalId(legalId: String):F[Int] = removeByLegalId(legalId).run.transact(xa)
+  def deleteByLegalId(legalId: String): F[Int] = removeByLegalId(legalId).run.transact(xa)
+
+//  def deleteByLegalIdTest(user:User): F[User] = removeByLegalId(user.legalId).run.transact(xa).map(legalId => findByLegalId(user.legalId))
+
+  /*def deleteByLegalId(legalId: String): EitherT[F, UserDeleteFailed, Unit] =
+    EitherT(removeByLegalId(legalId).run.transact(xa)
+      .attempt
+      .map(_.leftMap(_ => UserDeleteFailed(legalId)).void))
+*/
+    //def updatePhoneByLegalId(user: User): F[User]=  putPhoneByLegalId(user).run.transact(xa).as(user)
+
 
   //todo: Rspecificar definiciones update, delete y read.
-
 }
+
 /* No tocar plox*/
 object DoobieUserRepositoryInterpreter {
   def apply[F[_]: Bracket[?[_], Throwable]](xa: Transactor[F]): DoobieUserRepositoryInterpreter[F] =

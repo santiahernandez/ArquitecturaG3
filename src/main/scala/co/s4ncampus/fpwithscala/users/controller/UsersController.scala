@@ -46,15 +46,29 @@ class UsersController[F[_]: Sync] extends Http4sDsl[F] {
 
     private def deleteUser (userService: UserService[F]): HttpRoutes[F] =
         HttpRoutes.of[F] {
-            case DELETE -> Root / id =>
+            case req @DELETE -> Root / legalId =>
                 val action = for {
-                    result <- userService.deleteByLegalId(id).value
+                   result <- userService.deleteByLegalId(legalId).value
                 } yield result
                 action.flatMap {
                     case Right(_) => Ok("Deleted")
+                    case Left(UserDeleteFailed(_)) => Conflict(s"The user with legal id $legalId doesn't exists")
+                }
+        }
+
+    /*private def updateUserPhone (userService: UserService[F]): HttpRoutes[F] =
+        HttpRoutes.of[F] {
+            case PUT -> Root /id /phone =>
+                val action = for {
+                    result <- userService.updatePhoneBylegalId(id,phone).value
+                } yield result
+                action.flatMap {
+                    case Right(saved) => Ok(saved.asJson)
                     case Left(UserDoesntExistError) => Conflict(s"The user with legal id $id doesn't exists")
                 }
         }
+
+     */
 
 
     def endpoints(userService: UserService[F]): HttpRoutes[F] = {
