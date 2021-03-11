@@ -9,7 +9,7 @@ trait UserRepositoryAlgebra[F[_]] {
 
   def deleteByLegalId(legalId: String): F[Int]
 
-  //def updatePhoneByLegalId(user: User): F[User]
+  def updatePhoneByLegalId(legalId:String , phone:String): F[Int]
 
   //def updateEmailByLegalId(legalId: String, email:String): OptionT[F, User]
   //def updateNameByLegalId(legalId: String, name:String): OptionT[F, User]

@@ -21,6 +21,10 @@ private object UserSQL {
     WHERE LEGAL_ID = $legalId
   """.query[User]
 
+  def putPhoneByLegalId(legalId:String, phone:String): Update0 = sql"""
+    UPDATE USERS SET PHONE = $phone
+    WHERE LEGAL_ID = $legalId
+  """.update
   /**
    *
    * @param legalId
@@ -49,7 +53,10 @@ class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Tr
   def create(user: User): F[User] =
     insert(user).withUniqueGeneratedKeys[Long]("ID").map(id => user.copy(id = id.some)).transact(xa)
 
-  def findByLegalId(legalId: String): OptionT[F, User] = OptionT(selectByLegalId(legalId).option.transact(xa))
+  def findByLegalId(legalId: String): OptionT[F, User] =
+    OptionT(selectByLegalId(legalId).option.transact(xa))
+
+  def updatePhoneByLegalId(legalId: String, phone:String): F[Int] = putPhoneByLegalId(legalId,phone ).run.transact(xa)
 
   def deleteByLegalId(legalId: String): F[Int] = removeByLegalId(legalId).run.transact(xa)
 
