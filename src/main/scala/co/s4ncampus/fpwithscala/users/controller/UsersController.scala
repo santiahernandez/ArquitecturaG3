@@ -59,7 +59,7 @@ class UsersController[F[_] : Sync] extends Http4sDsl[F] {
 
   private def updateEverythingBylegalId(userService: UserService[F]): HttpRoutes[F] =
     HttpRoutes.of[F] {
-      case req@PUT -> Root=>
+      case req@PATCH -> Root=>
         val action = for {
           user <- req.as[User]
           result <- userService.updateEverythingBylegalId(user).value
