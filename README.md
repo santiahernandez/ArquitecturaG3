@@ -17,15 +17,15 @@ Here you will find the dependencies and libraries we use.
 - [characteristics](https://github.com/santiahernandez/ArquitecturaG3/blob/master/build.sbt)
 
 # Deployment 🚀
-**"In the project resources (ArquitecturaG3/src/main/resources)"**
+**In the project resources (ArquitecturaG3/src/main/resources)**
 ``` 
 $ docker-compose up -d
 ``` 
-**"In the project root (ArquitecturaG3)"**
+**In the project root (ArquitecturaG3)**
 ``` 
 $ sbt run
 ```
-**"If Google chrome is installed you can display the documentation by running the following the command in the project main package(ArquitecturaG3/src/main)**
+**If Google chrome is installed you can display the documentation by running the following the command in the project main package(ArquitecturaG3/src/main)**
 ```
 $ google-chrome Documentation.html
 ```
