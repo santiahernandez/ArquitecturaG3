@@ -6,4 +6,4 @@ CREATE TABLE USERS (
   EMAIL VARCHAR NOT NULL,
   PHONE VARCHAR NOT NULL
 );
--- todo: En tal caso expandir con nuevas entidades
+

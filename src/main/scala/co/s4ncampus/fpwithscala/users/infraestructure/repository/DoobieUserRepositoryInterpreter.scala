@@ -21,23 +21,47 @@ private object UserSQL {
     WHERE LEGAL_ID = $legalId
   """.query[User]
 
-  //todo: Creacion de funciones update, delete y read en formato SQL
+  /**
+   *
+   * @param legalId
+   * @return
+   */
+  def removeByLegalId(legalId: String): Update0 = sql"""
+    DELETE
+    FROM USERS
+    WHERE LEGAL_ID = $legalId
+  """.update
+
+  def putEverythingByLegalid(user:User): Update0 = sql"""
+    UPDATE USERS
+    SET FIRST_NAME = ${user.firstName},
+    LAST_NAME = ${user.lastName},
+    EMAIL = ${user.email},
+    PHONE = ${user.phone}
+    WHERE LEGAL_ID = ${user.legalId}
+  """.update
+
 }
 
 class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Transactor[F])
-    extends UserRepositoryAlgebra[F] {
+  extends UserRepositoryAlgebra[F] {
+
   import UserSQL._
 
-  def create(user: User): F[User] = 
-    insert(user).withUniqueGeneratedKeys[Long]("ID").map(id => user.copy(id = id.some)).transact(xa)
+  def create(user: User): F[User] =
+    insert(user).withUniqueGeneratedKeys[Long]("id").map(id => user.copy(id = id.some)).transact(xa)
 
-  def findByLegalId(legalId: String): OptionT[F, User] = OptionT(selectByLegalId(legalId).option.transact(xa))
+  def findByLegalId(legalId: String): OptionT[F, User] =
+    OptionT(selectByLegalId(legalId).option.transact(xa))
 
-  //todo: Rspecificar definiciones update, delete y read.
+  def deleteByLegalId(legalId: String): F[Boolean] = removeByLegalId(legalId).run.transact(xa).map(l => l == 1)
+
+  def updateEverythingByLegalId(user: User): F[Boolean] = putEverythingByLegalid(user).run.transact(xa).map(l => l == 1)
 
 }
 
 object DoobieUserRepositoryInterpreter {
   def apply[F[_]: Bracket[?[_], Throwable]](xa: Transactor[F]): DoobieUserRepositoryInterpreter[F] =
-    new DoobieUserRepositoryInterpreter[F](xa)
+    new DoobieUserRepositoryInterpreter[F](xa) {
+    }
 }
