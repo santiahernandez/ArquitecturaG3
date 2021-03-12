@@ -41,7 +41,7 @@ $ firefox Documentation.html
 * **[Persistence: ](https://github.com/santiahernandez/ArquitecturaG3/blob/master/src/main/scala/co/s4ncampus/fpwithscala/users/infraestructure/repository/DoobieUserRepositoryInterpreter.scala)** In charge of carrying out the direct communication methods in SQL. 
 * **[Controller: ](https://github.com/santiahernandez/ArquitecturaG3/blob/master/src/main/scala/co/s4ncampus/fpwithscala/users/controller/UsersController.scala)** Manage the user requests in order to send them to the service layer
  
-# Authors 🔨
+# Authors :hocho:
 * Santiago Hernández Montaño. 
 * David Barrera Acosta.
 * David Ríos Vélez.
