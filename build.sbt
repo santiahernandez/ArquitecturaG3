@@ -1,3 +1,5 @@
+
+
 val CatsVersion = "2.2.0"
 val Http4sVersion = "0.21.16"
 val CirceVersion = "0.13.0"
@@ -17,6 +19,8 @@ lazy val root = (project in file("."))
     version := "0.0.1-SNAPSHOT",
     scalaVersion := "2.13.0",
     libraryDependencies ++= Seq(
+      "org.scalactic" %% "scalactic" % "3.2.5",
+      "org.scalatest" %% "scalatest" % "3.2.5" % "test",
       "org.typelevel"   %% "cats-core"            % CatsVersion,
       "org.http4s"      %% "http4s-blaze-server"  % Http4sVersion,
       "org.http4s"      %% "http4s-blaze-client"  % Http4sVersion,

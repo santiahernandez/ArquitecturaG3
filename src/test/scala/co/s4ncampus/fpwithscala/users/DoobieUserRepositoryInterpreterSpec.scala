@@ -4,16 +4,17 @@ import co.s4ncampus.fpwithscala.users.infraestructure.repository.DoobieUserRepos
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-/*
-/class DoobieUserRepositoryInterpreterSpec extends AnyFlatSpec with Matchers{
+
+/*class DoobieUserRepositoryInterpreterSpec extends AnyFlatSpec with Matchers{
 
     "" should "" in {
-    DoobieUserRepositoryInterpreter.
+    DoobieUserRepositoryInterp
 
     }
 
 }
+*/
 
- */
+
 
 
